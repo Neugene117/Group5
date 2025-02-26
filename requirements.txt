@@ -1,3 +1,34 @@
+# Core Flask dependencies
 Flask==2.0.1
+Flask-WTF==1.0.0
+Jinja2==3.0.1
+Werkzeug==2.0.1
+
+# Database
+SQLAlchemy==1.4.23
+Flask-SQLAlchemy==2.5.1
 mysql-connector-python==8.0.26
+
+# Security & Environment
 python-dotenv==0.19.0
+itsdangerous==2.0.1
+
+# Basic utilities
+click==8.0.1
+MarkupSafe==2.0.1
+
+# Date/Time handling
+python-dateutil==2.8.2
+
+# Testing (optional)
+pytest==6.2.5
+pytest-cov==2.12.1
+
+# Production server (optional)
+gunicorn==20.1.0
+
+# HTTP handling
+requests==2.26.0
+
+# Font Awesome (for icons)
+fontawesome-free==5.15.4
