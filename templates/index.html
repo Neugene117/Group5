@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Professional Malaria Diagnosis System</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header class="main-header">
+        <div class="mosquito-banner">
+          <i class="fas fa-mosquito mosquito-icon flying left"></i>
+          <i class="fas fa-hospital-user main-icon"></i>
+          <i class="fas fa-mosquito mosquito-icon flying right"></i>
+        </div>
+        <h1>
+          <i class="fas fa-shield-virus header-icon"></i>
+          Malaria Diagnostic Assistant
+        </h1>
+        <p class="subtitle">
+          <i class="fas fa-stethoscope"></i>
+          Professional Clinical Assessment Tool
+        </p>
+        <div class="mosquito-swarm">
+          <i class="fas fa-mosquito tiny-mosquito m1"></i>
+          <i class="fas fa-mosquito tiny-mosquito m2"></i>
+          <i class="fas fa-mosquito tiny-mosquito m3"></i>
+        </div>
+      </header>
+
+      <form action="/evaluate" method="POST" class="medical-form">
+        <!-- Add patient information section -->
+        <div class="form-section patient-info-section">
+          <h3><i class="fas fa-user"></i> Patient Information</h3>
+          <div class="patient-info-grid">
+            <div class="input-group">
+              <label for="name">
+                <i class="fas fa-user-circle"></i>
+                Patient Name:
+              </label>
+              <div class="styled-input custom-field">
+                <input
+                  type="text"
+                  name="name"
+                  id="name"
+                  required
+                  class="form-control custom-input"
+                  placeholder=" "
+                />
+                <span class="input-label">Enter patient's full name</span>
+                <div class="input-line"></div>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label for="age">
+                <i class="fas fa-birthday-cake"></i>
+                Age:
+              </label>
+              <div class="styled-input custom-field">
+                <input
+                  type="number"
+                  name="age"
+                  id="age"
+                  min="0"
+                  max="120"
+                  required
+                  class="form-control custom-input"
+                  placeholder=" "
+                />
+                <span class="input-label">Enter age in years</span>
+                <div class="input-line"></div>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label for="gender">
+                <i class="fas fa-venus-mars"></i>
+                Gender:
+              </label>
+              <div class="styled-input custom-field">
+                <select
+                  name="gender"
+                  id="gender"
+                  required
+                  class="form-control custom-select"
+                >
+                  <option value="" disabled selected></option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+                <span class="input-label">Select gender</span>
+                <div class="input-line"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section vital-section">
+          <h3>
+            <i class="fas fa-thermometer-half"></i>
+            1. Vital Signs
+          </h3>
+          <div class="vital-signs">
+            <label>
+              Body Temperature (°C):
+              <input
+                type="number"
+                name="temperature"
+                step="0.1"
+                min="35"
+                max="42"
+                value="37.0"
+                required
+              />
+            </label>
+          </div>
+        </div>
+
+        <div class="form-section symptoms-section">
+          <h3>
+            <i class="fas fa-mosquito bounce"></i>
+            <span>2. Clinical Symptoms</span>
+            <i class="fas fa-virus"></i>
+          </h3>
+          <div class="symptom-grid">
+            <label class="symptom-item"
+              ><input type="checkbox" name="symptoms" value="fever" />
+              Fever</label
+            >
+            <label class="symptom-item"
+              ><input type="checkbox" name="symptoms" value="chills" />
+              Chills</label
+            >
+            <label class="symptom-item"
+              ><input type="checkbox" name="symptoms" value="sweating" />
+              Sweating</label
+            >
+            <label class="symptom-item"
+              ><input type="checkbox" name="symptoms" value="headache" />
+              Headache</label
+            >
+            <label class="symptom-item"
+              ><input type="checkbox" name="symptoms" value="fatigue" />
+              Fatigue</label
+            >
+            <label class="symptom-item"
+              ><input type="checkbox" name="symptoms" value="nausea" />
+              Nausea</label
+            >
+            <label class="symptom-item"
+              ><input type="checkbox" name="symptoms" value="vomiting" />
+              Vomiting</label
+            >
+            <label class="symptom-item"
+              ><input type="checkbox" name="symptoms" value="muscle_pain" />
+              Muscle Pain</label
+            >
+          </div>
+        </div>
+
+        <div class="form-section risk-section">
+          <h3>
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>3. Risk Factors</span>
+            <i class="fas fa-mosquito flip"></i>
+          </h3>
+          <div class="risk-factors">
+            <label
+              ><input type="checkbox" name="endemic_area" /> Patient from
+              endemic area</label
+            >
+            <label
+              ><input type="checkbox" name="travel_history" /> Recent travel to
+              endemic region</label
+            >
+            <label
+              ><input type="checkbox" name="mosquito_exposure" /> Known mosquito
+              exposure</label
+            >
+            <label
+              ><input type="checkbox" name="previous_malaria" /> Previous
+              malaria infection</label
+            >
+          </div>
+        </div>
+
+        <div class="button-group">
+          <button type="submit" class="primary-button">
+            <i class="fas fa-microscope"></i> Generate Assessment
+          </button>
+          <button type="reset" class="secondary-button">
+            <i class="fas fa-undo"></i> Clear Form
+          </button>
+        </div>
+      </form>
+
+      <footer>
+        <div class="footer-icons">
+          <i class="fas fa-mosquito footer-mosquito"></i>
+          <i class="fas fa-user-md"></i>
+          <i class="fas fa-mosquito footer-mosquito flip"></i>
+        </div>
+        <p class="disclaimer">
+          This tool is designed to assist healthcare professionals and should
+          not replace clinical judgment.
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

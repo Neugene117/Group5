@@ -1,0 +1,125 @@
+/* filepath: /health-check-system/health-check-system/static/styles.css */
+/* This file contains the CSS styles for the health check system, defining various styles for patient information, forms, buttons, and other UI elements. */
+
+:root {
+  --primary-color: #0072ce;
+  --secondary-color: #005eb8;
+  --success-color: #00a499;
+  --warning-color: #ffb81c;
+  --danger-color: #da291c;
+  --background-color: #f0f4f5;
+  --card-bg: #ffffff;
+  --text-primary: #003087;
+  --text-secondary: #425563;
+  --border-color: #e8edee;
+  --progress-bg: #e8edee;
+  --progress-high: #da291c;
+  --progress-moderate: #ffb81c;
+  --progress-low: #00a499;
+}
+
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--background-color);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+h1 {
+  color: var(--text-primary);
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+}
+
+h2 {
+  color: var(--primary-color);
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2.2em;
+}
+
+.patient-header {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: rgba(0, 114, 206, 0.05);
+  border-radius: 8px;
+}
+
+.patient-name {
+  font-size: 1.8rem;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.patient-details {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: var(--text-secondary);
+}
+
+.patient-details span {
+  font-size: 1.1rem;
+}
+
+button {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.1em;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: var(--secondary-color);
+}
+
+.form-control {
+  width: 100%;
+  padding: 1rem 1.2rem;
+  font-size: 1.1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.form-control:hover {
+  border-color: var(--secondary-color);
+  background: #fafbff;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(0, 114, 206, 0.1);
+}
+
+/* Additional styles can be added here as needed */

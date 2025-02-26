@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Result</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h2>🔍 Health Test</h2>
+      <form action="/test" method="POST">
+        <label for="test_result">Please indicate your test result:</label>
+        <select name="test_result" id="test_result">
+          <option value="positive">Positive</option>
+          <option value="negative">Negative</option>
+        </select>
+        <button type="submit">Submit Result</button>
+      </form>
+      <a href="/" class="back-link">← Back to Home</a>
+    </div>
+  </body>
+</html>

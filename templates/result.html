@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clinical Assessment Results</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="logo-container">
+          <i class="fas fa-mosquito animated-icon"></i>
+          <i class="fas fa-clipboard-list"></i>
+          <i class="fas fa-mosquito animated-icon mirror"></i>
+        </div>
+        <div class="logo">📊</div>
+        <h1>Clinical Assessment Report</h1>
+        <!-- Add patient name -->
+        <div class="patient-header">
+          <h2 class="patient-name">{{ patient.name }}</h2>
+          <div class="patient-details">
+            <span>Age: {{ patient.age }} years</span>
+            <span>•</span>
+            <span>Gender: {{ patient.gender }}</span>
+          </div>
+        </div>
+        <p class="timestamp">Generated on: {{ vital_signs.timestamp }}</p>
+      </header>
+
+      <div class="risk-indicator">
+        <div
+          class="percentage-circle"
+          style="
+                --percentage: {{ (assessment.score/15) * 100 }};
+                --indicator-color: {{ 
+                    'var(--progress-high)' if assessment.score >= 10 
+                    else 'var(--progress-moderate)' if assessment.score >= 6 
+                    else 'var(--progress-low)' 
+                }};"
+        >
+          <span class="percentage-value"
+            >{{ "%.0f"|format((assessment.score/15) * 100) }}%</span
+          >
+        </div>
+        <div
+          class="risk-level-label"
+          style="--indicator-color: {{ 
+                'var(--progress-high)' if assessment.score >= 10 
+                else 'var(--progress-moderate)' if assessment.score >= 6 
+                else 'var(--progress-low)' 
+            }};"
+        >
+          {{ assessment.recommendation.level.replace('_', ' ') }}
+        </div>
+      </div>
+
+      <div class="status-indicators">
+        <div class="status-card">
+          <i class="fas fa-chart-line card-icon"></i>
+          <div class="status-value">{{ assessment.score }}/15</div>
+          <div class="status-label">Risk Score</div>
+        </div>
+        <div class="status-card">
+          <i class="fas fa-exclamation-circle card-icon"></i>
+          <div class="status-value">{{ assessment.critical_symptoms }}</div>
+          <div class="status-label">Critical Symptoms</div>
+        </div>
+        <div class="status-card">
+          <i class="fas fa-list-ul card-icon"></i>
+          <div class="status-value">{{ symptoms|length }}</div>
+          <div class="status-label">Total Symptoms</div>
+        </div>
+      </div>
+
+      <div class="result-section {{ assessment.recommendation.level.lower() }}">
+        <div class="risk-badge">
+          {{ assessment.recommendation.level.replace('_', ' ') }}
+        </div>
+        <h2>Risk Assessment Summary</h2>
+        <div class="assessment-details">
+          <p class="recommendation">{{ assessment.recommendation.action }}</p>
+          <p class="urgency">{{ assessment.recommendation.urgency }}</p>
+        </div>
+        <div class="risk-score">Risk Score: {{ assessment.score }}/15</div>
+      </div>
+
+      <div class="details-grid">
+        <div class="detail-card">
+          <h3><i class="fas fa-vial"></i> Recommended Tests</h3>
+          {% if assessment.recommendation.tests %}
+          <ul>
+            {% for test in assessment.recommendation.tests %}
+            <li>{{ test }}</li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p>No immediate tests required</p>
+          {% endif %}
+        </div>
+
+        <div class="detail-card">
+          <h3><i class="fas fa-notes-medical"></i> Reported Symptoms</h3>
+          <ul>
+            {% for symptom in symptoms %}
+            <li>{{ symptom.replace('_', ' ').title() }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="detail-card">
+          <h3><i class="fas fa-exclamation-triangle"></i> Risk Factors</h3>
+          {% if risk_factors %}
+          <ul>
+            {% for factor, value in risk_factors.items() %} {% if value %}
+            <li>{{ factor.replace('_', ' ').title() }}</li>
+            {% endif %} {% endfor %}
+          </ul>
+          {% else %}
+          <p>No risk factors identified.</p>
+          {% endif %}
+        </div>
+
+        <div class="detail-card">
+          <h3><i class="fas fa-thermometer-half"></i> Vital Signs</h3>
+          <p>Temperature: {{ vital_signs.temperature }}°C</p>
+        </div>
+      </div>
+
+      <div class="medicine-section">
+        <h2><i class="fas fa-pills"></i> Treatment Recommendations</h2>
+
+        {% if assessment.recommendation.level != 'LOW_RISK' %}
+        <div class="medicine-cards">
+          <div class="medicine-card">
+            <h3><i class="fas fa-user"></i> For Adults</h3>
+            <div class="medicine-details">
+              <p>
+                <strong>Primary Treatment:</strong> 
+                {{ assessment.recommendation.medicines.adult.primary }}
+              </p>
+              <p>
+                <strong>Alternative:</strong> {{
+                assessment.recommendation.medicines.adult.alternative }}
+              </p>
+              <p>
+                <strong>Typical Dosage:</strong> {{
+                assessment.recommendation.medicines.adult.dosage }}
+              </p>
+              <p class="warning">
+                <i class="fas fa-exclamation-triangle"></i> {{
+                assessment.recommendation.medicines.adult.warning }}
+              </p>
+            </div>
+          </div>
+
+          <div class="medicine-card">
+            <h3><i class="fas fa-baby"></i> For Children</h3>
+            <div class="medicine-details">
+              <p>
+                <strong>Primary Treatment:</strong> {{
+                assessment.recommendation.medicines.child.primary }}
+              </p>
+              <p>
+                <strong>Dosage:</strong> {{
+                assessment.recommendation.medicines.child.dosage }}
+              </p>
+              <p class="warning">
+                <i class="fas fa-exclamation-triangle"></i> {{
+                assessment.recommendation.medicines.child.warning }}
+              </p>
+            </div>
+          </div>
+
+          <div class="medicine-card">
+            <h3><i class="fas fa-female"></i> During Pregnancy</h3>
+            <div class="medicine-details">
+              <p>
+                <strong>Primary Treatment:</strong> {{
+                assessment.recommendation.medicines.pregnant.primary }}
+              </p>
+              <p>
+                <strong>Dosage:</strong> {{
+                assessment.recommendation.medicines.pregnant.dosage }}
+              </p>
+              <p class="warning">
+                <i class="fas fa-exclamation-triangle"></i> {{
+                assessment.recommendation.medicines.pregnant.warning }}
+              </p>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <div class="low-risk-message">
+          <p>
+            <i class="fas fa-info-circle"></i> {{
+            assessment.recommendation.medicines.warning }}
+          </p>
+          <p class="preventive">
+            <i class="fas fa-shield-virus"></i> {{
+            assessment.recommendation.medicines.preventive }}
+          </p>
+        </div>
+        {% endif %}
+
+        <div class="medicine-disclaimer">
+          {{ assessment.recommendation.medicines.disclaimer }}
+        </div>
+      </div>
+
+      <div class="medication-section">
+        <h2><i class="fas fa-pills"></i> Prescribed Medications</h2>
+
+        <div class="medication-cards">
+          <!-- Primary Treatment -->
+          <div class="medication-card primary">
+            <h3><i class="fas fa-star"></i> Primary Treatment</h3>
+            <div class="med-content">
+              <div class="med-name">
+                {{ assessment.recommendation.medications.primary.name }}
+              </div>
+              <div class="med-dosage">
+                <i class="fas fa-clock"></i>
+                {{ assessment.recommendation.medications.primary.dosage }}
+              </div>
+              <div class="med-description">
+                {{ assessment.recommendation.medications.primary.description }}
+              </div>
+              <div class="med-warnings">
+                <h4><i class="fas fa-exclamation-triangle"></i> Warnings</h4>
+                <ul>
+                  {% for warning in
+                  assessment.recommendation.medications.primary.warnings %}
+                  <li>{{ warning }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Supportive Treatments -->
+          {% if assessment.recommendation.medications.supportive %}
+          <div class="medication-card supportive">
+            <h3><i class="fas fa-plus-circle"></i> Supportive Treatments</h3>
+            {% for med in assessment.recommendation.medications.supportive %}
+            <div class="med-content">
+              <div class="med-name">{{ med.name }}</div>
+              <div class="med-dosage">
+                <i class="fas fa-clock"></i>
+                {{ med.dosage }}
+              </div>
+              {% if med.max_daily %}
+              <div class="med-max">
+                <i class="fas fa-exclamation-circle"></i>
+                Maximum daily dose: {{ med.max_daily }}
+              </div>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="instructions-section">
+          <h3><i class="fas fa-clipboard-list"></i> Treatment Instructions</h3>
+          <ul class="instruction-list">
+            {% for instruction in
+            assessment.recommendation.medications.instructions %}
+            <li>{{ instruction }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="medication-disclaimer">
+          <i class="fas fa-exclamation-triangle"></i>
+          Important: These medication recommendations are based on general
+          guidelines. Always consult a healthcare provider before starting any
+          treatment.
+        </div>
+      </div>
+
+      <div class="symptoms-section">
+        <h3>Symptoms Severity</h3>
+        <div class="symptoms-progress">
+          <div
+            class="symptoms-bar"
+            style="width: {{ (symptoms|length / 10) * 100 }}%; background: {{ 'var(--progress-high)' if symptoms|length >= 7 else 'var(--progress-moderate)' if symptoms|length >= 4 else 'var(--progress-low)' }}"
+          ></div>
+        </div>
+      </div>
+
+      <div class="button-group">
+        <a href="/" class="secondary-button">
+          <span class="icon">←</span> New Assessment
+        </a>
+        <button onclick="window.print()" class="primary-button">
+          <span class="icon">🖨️</span> Print Report
+        </button>
+      </div>
+
+      <footer>
+        <p class="report-footer">
+          Report ID: {{ range(100000, 999999) | random }}
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

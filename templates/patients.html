@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Patient Records</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1><i class="fas fa-users"></i> Patient Records</h1>
+      </header>
+
+      <div class="records-container">
+        {% if patients %}
+        <table class="patient-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Age</th>
+              <th>Gender</th>
+              <th>Symptoms</th>
+              <th>Medications</th>
+              <th>Treatment Recommendations</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for patient in patients %}
+            <tr>
+              <td>{{ patient.id }}</td>
+              <td>{{ patient.name }}</td>
+              <td>{{ patient.age }}</td>
+              <td>{{ patient.gender }}</td>
+              <td>{{ patient.symptoms.replace(',', ', ') }}</td>
+              <td>
+                {% if patient.medications %}
+                <ul class="medication-list">
+                  {% for med in patient.medications %}
+                  <li>
+                    <strong>{{ med.medicine }}</strong>
+                    <br />
+                    <small>{{ med.dosage }}</small>
+                  </li>
+                  {% endfor %}
+                </ul>
+                {% else %} No medications prescribed {% endif %}
+              </td>
+              <td>
+                <span
+                  class="treatment-badge {{ 'high-priority' if 'High priority' in patient.suggested_treatment else 'medium-priority' if 'Medium priority' in patient.suggested_treatment else 'low-priority' }}"
+                >
+                  {{ patient.suggested_treatment }}
+                </span>
+              </td>
+              <td>{{ patient.created_at }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <p class="no-records">No patient records found.</p>
+        {% endif %}
+      </div>
+
+      <div class="button-group">
+        <a href="/" class="secondary-button">
+          <i class="fas fa-arrow-left"></i> Back to Assessment
+        </a>
+      </div>
+    </div>
+  </body>
+</html>
